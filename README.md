@@ -19,8 +19,8 @@ python utils/download.py
 
 Or download directly from Google Drive:
 
-- Main Model: [Data](https://drive.google.com/file/d/12yTMuJ6ldziXcIkIec2UmWs0urvDBYqn/view?usp=sharing) and [Meta](https://drive.google.com/file/d/1CRgzPUWFdo3qMhCrTh-GWYZ0D6SDhm74/view?usp=sharing)
-- Compared Model: [Data](https://drive.google.com/file/d/1wmx7AM6XWHjHIvpErmIouQgbQoMxAymG/view?usp=sharing) and [Meta](https://drive.google.com/file/d/1OmrGMng1QuwUa8lf-_wBVvbRJwBr0ETr/view?usp=sharing)
+- Improved Model (Multi): [Data](https://drive.google.com/file/d/12yTMuJ6ldziXcIkIec2UmWs0urvDBYqn/view?usp=sharing) and [Meta](https://drive.google.com/file/d/1CRgzPUWFdo3qMhCrTh-GWYZ0D6SDhm74/view?usp=sharing)
+- Basic Model (Unet): [Data](https://drive.google.com/file/d/1wmx7AM6XWHjHIvpErmIouQgbQoMxAymG/view?usp=sharing) and [Meta](https://drive.google.com/file/d/1OmrGMng1QuwUa8lf-_wBVvbRJwBr0ETr/view?usp=sharing)
 - Dataset: [Sony](https://drive.google.com/file/d/10kpAcvldtcb9G2ze5hTcF1odzu4V_Zvh/view?usp=sharing)
 
 
@@ -58,7 +58,7 @@ Use the following commands to test:
 python test.py
 ```
 
-Use the following commands to compare the improved method with base method:
+Use the following commands to compare the improved method with Basic method:
 
 ```
 python test.py
@@ -72,5 +72,5 @@ Use i5-8500 and GTX-1070 to compare:
 
 | Method | End2End fps |
 | ------ | ------ |
-| Base | **1.0578** |
+| Basic | **1.0578** |
 | Improved | **1.1878** |

@@ -31,20 +31,20 @@ def save_response_content(response, destination):
                 f.write(chunk)
 
 
-res = input("Download Main Model? [y/n]: ")
+res = input("Download Improved Model? [y/n]: ")
 while res is not 'y' and res is not 'n' and res is not 'Y' and res is not 'N':
-    res = input("[Input error] Download Main Model? [y/n]: ")
+    res = input("[Input error] Download Improved Model? [y/n]: ")
 if res is 'y' or res is 'Y':
-    print('Downloading Main Model... (110MB)')
+    print('Downloading Improved Model... (110MB)')
     download_file_from_google_drive('12yTMuJ6ldziXcIkIec2UmWs0urvDBYqn', 'checkpoint/Multi/model.ckpt.data-00000-of-00001')
     download_file_from_google_drive('1CRgzPUWFdo3qMhCrTh-GWYZ0D6SDhm74', 'checkpoint/Multi/model.ckpt.meta')
 
 
-res = input("Download Compared Model? [y/n]: ")
+res = input("Download Basic Model? [y/n]: ")
 while res is not 'y' and res is not 'n' and res is not 'Y' and res is not 'N':
-    res = input("[Input error] Download Compared Model? [y/n]: ")
+    res = input("[Input error] Download Basic Model? [y/n]: ")
 if res is 'y' or res is 'Y':
-    print('Downloading Compared Model... (84MB)')
+    print('Downloading Basic Model... (84MB)')
     download_file_from_google_drive('1wmx7AM6XWHjHIvpErmIouQgbQoMxAymG', 'checkpoint/Unet/model.ckpt.data-00000-of-00001')
     download_file_from_google_drive('1OmrGMng1QuwUa8lf-_wBVvbRJwBr0ETr', 'checkpoint/Unet/model.ckpt.meta')
 
