@@ -58,10 +58,10 @@ Use the following commands to test:
 python test.py
 ```
 
-Use the following commands to compare the improved method with Basic method:
+Use the following commands to compare the improved method with basic method:
 
 ```
-python test.py
+python compare.py
 ```
 
 ## Result
