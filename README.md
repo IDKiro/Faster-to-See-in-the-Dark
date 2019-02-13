@@ -5,19 +5,19 @@ It's a faster method for Low-light image processing which is related to the foll
 - Title: Decoupling Semantic Context and Color Correlation with multi-class cross branch regularization
 - Cite as: [arXiv:1810.07901](https://arxiv.org/abs/1810.07901)
 
-This is only a Tensorflow implementation of the paper. It also use See-in-the-Dark (SID) dataset.
+This is only a Tensorflow implementation of the paper. It also uses See-in-the-Dark (SID) dataset.
 
 ## Setup
 
 **It uses the same dataset as [Learning-to-See-in-the-Dark](https://github.com/cchen156/Learning-to-See-in-the-Dark), so you can only download the model to start.**
 
-Use the following command to download the dataset or trained model:
+Use the following command to download the dataset or trained model and follow the prompts to select the downloaded content:
 
 ```
 python utils/download.py
 ```
 
-Or download directly from Google Drive:
+Also you can download directly from Google Drive:
 
 - Improved Model (Multi): [Data](https://drive.google.com/file/d/12yTMuJ6ldziXcIkIec2UmWs0urvDBYqn/view?usp=sharing) and [Meta](https://drive.google.com/file/d/1CRgzPUWFdo3qMhCrTh-GWYZ0D6SDhm74/view?usp=sharing)
 - Basic Model (Unet): [Data](https://drive.google.com/file/d/1wmx7AM6XWHjHIvpErmIouQgbQoMxAymG/view?usp=sharing) and [Meta](https://drive.google.com/file/d/1OmrGMng1QuwUa8lf-_wBVvbRJwBr0ETr/view?usp=sharing)
