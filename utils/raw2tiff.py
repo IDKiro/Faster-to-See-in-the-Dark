@@ -24,14 +24,13 @@ if not os.path.isdir(input_dir):
 if not os.path.isdir(output_dir):
     os.makedirs(output_dir)
 
-raw_filelist = glob.glob(input_dir + '*.ARW')
+raw_filelist = glob.glob(os.path.join(input_dir, '*.ARW'))
 
-for raw_file in raw_filelist:
-    raw_filename = os.path.split(raw_file)
+for raw_file in raw_filelist:  
     raw = rawpy.imread(raw_file)
     processed = raw.postprocess(use_camera_wb=True, half_size=False, no_auto_bright=True, output_bps=16)
-    
-    filename = os.path.splitext(raw_filename[len(raw_filename)-1])[0]
+
+    filename = os.path.splitext(os.path.split(raw_file)[-1])[0]
     tiff_file = os.path.join(output_dir, filename+'.tiff')
     tifffile.imwrite(tiff_file, data=processed)
     print('saved:', tiff_file)
