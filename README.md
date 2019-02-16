@@ -1,6 +1,6 @@
 # Faster-to-See-in-the-Dark
 
-It's a faster method for Low-light image processing which is related to the followed paper:
+It's a faster method for low-light image processing which is related to the followed paper:
 
 - Title: Decoupling Semantic Context and Color Correlation with multi-class cross branch regularization
 - Cite as: [arXiv:1810.07901](https://arxiv.org/abs/1810.07901)

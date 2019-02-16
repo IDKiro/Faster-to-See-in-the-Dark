@@ -71,6 +71,9 @@ if ckpt:
     print('loaded', checkpoint_dir)
     saver.restore(sess, ckpt.model_checkpoint_path)
 
+if not os.path.isdir(checkpoint_dir):
+    os.makedirs(checkpoint_dir)
+
 #Raw data takes long time to load. Keep them in memory after loaded.
 gt_images=[None]*6000
 input_images = {}
