@@ -67,12 +67,18 @@ def designB(i_s, i_c, in_channels):
     c = tf.concat([pw2, oc], 3)
     return s, c
 
-def multiBranch(input):
+def multiBranch(input, ifdesignB=False):
     conv1 = slim.conv2d(input, 16, [3,3], rate=1, activation_fn=lrelu, scope='g_conv1_1')
 
-    s1, c1 = designA(conv1, conv1, 16)
-    s2, c2 = designA(s1, c1, 32)
-    s3, c3 = designA(s2, c2, 64)
+    if(ifdesignB):
+        s1, c1 = designB(conv1, conv1, 16)
+        s2, c2 = designB(s1, c1, 32)
+        s3, c3 = designB(s2, c2, 64)
+    else:
+        s1, c1 = designA(conv1, conv1, 16)
+        s2, c2 = designA(s1, c1, 32)
+        s3, c3 = designA(s2, c2, 64)
+    
 
     channel_weight_output = tf.multiply(s3, c3)
 
