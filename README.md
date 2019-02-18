@@ -1,4 +1,4 @@
-# Faster-to-See-in-the-Dark
+# Faster-to-See-in-the-Dark 
 
 It's a faster method for low-light image processing which is related to the followed paper:
 
@@ -19,7 +19,7 @@ python utils/download.py
 
 Also you can download directly from Google Drive:
 
-- Improved Model (Multi): [Data](https://drive.google.com/file/d/12yTMuJ6ldziXcIkIec2UmWs0urvDBYqn/view?usp=sharing) and [Meta](https://drive.google.com/file/d/1CRgzPUWFdo3qMhCrTh-GWYZ0D6SDhm74/view?usp=sharing)
+- Improved Model (Multi 3-layer version): [Data](https://drive.google.com/file/d/1rX_bVXg3Hmvh0Cc_9HsmNehSuCStX4xf/view?usp=sharing) and [Meta](https://drive.google.com/file/d/1ocCARN9XwTZe4VmALDasuhaNP1kuARr0/view?usp=sharing)
 - Basic Model (Unet): [Data](https://drive.google.com/file/d/1wmx7AM6XWHjHIvpErmIouQgbQoMxAymG/view?usp=sharing) and [Meta](https://drive.google.com/file/d/1OmrGMng1QuwUa8lf-_wBVvbRJwBr0ETr/view?usp=sharing)
 - Dataset: [Sony](https://drive.google.com/file/d/10kpAcvldtcb9G2ze5hTcF1odzu4V_Zvh/view?usp=sharing)
 
@@ -71,5 +71,5 @@ Use i5-8500 and GTX-1070 to compare:
 
 | Method | End2End fps |
 | ------ | ------ |
-| Basic | **1.0578** |
-| Improved | **1.1878** |
+| Basic | **1.0750** |
+| Improved | **1.5503** |
