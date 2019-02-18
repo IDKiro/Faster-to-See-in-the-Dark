@@ -44,42 +44,13 @@ def designA(i_s, i_c, in_channels):
     c = tf.concat([pw2, oc], 3)
     return s, c
 
-def designB(i_s, i_c, in_channels):
-    dw1 = slim.separable_conv2d(i_s, None, [3,3],1, activation_fn=lrelu)
-    dw1 = slim.avg_pool2d(dw1, [2,2], padding='SAME')
-    dw2 = slim.separable_conv2d(dw1, None, [3,3],1, activation_fn=lrelu)
-    dw2 = slim.avg_pool2d(dw2, [2,2], padding='SAME')
-
-    pw1 = slim.conv2d(i_c, in_channels, [1,1], activation_fn=lrelu)
-    pw1 = slim.avg_pool2d(pw1, [2,2], padding='SAME')
-    pw2 = slim.conv2d(pw1, in_channels, [1,1], activation_fn=lrelu)
-    pw2 = slim.avg_pool2d(pw2, [2,2], padding='SAME')
-
-    ws = tf.Variable(1, dtype=tf.float32, name="ws")
-    wc = tf.Variable(1, dtype=tf.float32, name="wc")
-    wsc = tf.Variable(0, dtype=tf.float32, name="wsc")
-    os = ws * i_s + wsc * i_c
-    oc = wsc * i_s + wc * i_c
-    os = slim.avg_pool2d(os, [4,4], stride=4, padding='SAME')
-    oc = slim.avg_pool2d(oc, [4,4], stride=4, padding='SAME')
-
-    s = tf.concat([dw2, os], 3)
-    c = tf.concat([pw2, oc], 3)
-    return s, c
-
-def multiBranch(input, ifdesignB=False):
+def multiBranch(input):
     conv1 = slim.conv2d(input, 16, [3,3], rate=1, activation_fn=lrelu, scope='g_conv1_1')
 
-    if(ifdesignB):
-        s1, c1 = designB(conv1, conv1, 16)
-        s2, c2 = designB(s1, c1, 32)
-        s3, c3 = designB(s2, c2, 64)
-    else:
-        s1, c1 = designA(conv1, conv1, 16)
-        s2, c2 = designA(s1, c1, 32)
-        s3, c3 = designA(s2, c2, 64)
+    s1, c1 = designA(conv1, conv1, 16)
+    s2, c2 = designA(s1, c1, 32)
+    s3, c3 = designA(s2, c2, 64)
     
-
     channel_weight_output = tf.multiply(s3, c3)
 
     conv4 = slim.conv2d(channel_weight_output, 128, [3,3], rate=1, activation_fn=lrelu, scope='g_conv4_1')
