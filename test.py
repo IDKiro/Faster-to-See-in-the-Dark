@@ -34,15 +34,10 @@ result_dir = './result/'
 test_fns = glob.glob(gt_dir + '/1*.ARW')
 test_ids = [int(os.path.basename(test_fn)[0:5]) for test_fn in test_fns]
 
-DEBUG = 0
-if DEBUG == 1:
-    save_freq = 2
-    test_ids = test_ids[0:5]
-
 sess = tf.Session()
 in_image = tf.placeholder(tf.float32, [None, None, None, 4])
 gt_image = tf.placeholder(tf.float32, [None, None, None, 3])
-out_image = model.multiBranch(in_image)
+out_image = model.multi_A(in_image)
 
 saver = tf.train.Saver()
 sess.run(tf.global_variables_initializer())

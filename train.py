@@ -47,16 +47,10 @@ for i in range(len(test_fns)):
 ps = 512 #patch size for training
 save_freq = 500
 
-DEBUG = 0
-if DEBUG == 1:
-    save_freq = 2
-    train_ids = train_ids[0:5]
-    test_ids = test_ids[0:5]
-
 sess = tf.Session()
 in_image = tf.placeholder(tf.float32,[None,None,None,4])
 gt_image = tf.placeholder(tf.float32,[None,None,None,3])
-out_image = model.multiBranch(in_image)
+out_image = model.multi_A(in_image)
 
 G_loss = tf.reduce_mean(tf.abs(out_image - gt_image))
 

@@ -117,7 +117,7 @@ fps1, loss1 = run(inputImage, gtImage, unet_checkpoint_dir, model.unet)
 
 print('Use improved method to process...')
 tf.reset_default_graph()
-fps2, loss2 = run(inputImage, gtImage, multi_checkpoint_dir, model.multiBranch)
+fps2, loss2 = run(inputImage, gtImage, multi_checkpoint_dir, model.multi_A)
 
 print("Basic method:\nEnd2End fps: {prec: .4f}   Loss: {loss: .4f}".format(prec=fps1, loss=loss1))
 print("Improved method:\nEnd2End fps: {prec: .4f}   Loss: {loss: .4f}".format(prec=fps2, loss=loss2))

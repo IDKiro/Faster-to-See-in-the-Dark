@@ -36,8 +36,8 @@ while res is not 'y' and res is not 'n' and res is not 'Y' and res is not 'N':
     res = input("[Input error] Download Improved Model? [y/n]: ")
 if res is 'y' or res is 'Y':
     print('Downloading Improved Model... (110MB)')
-    download_file_from_google_drive('12yTMuJ6ldziXcIkIec2UmWs0urvDBYqn', 'checkpoint/Multi/model.ckpt.data-00000-of-00001')
-    download_file_from_google_drive('1CRgzPUWFdo3qMhCrTh-GWYZ0D6SDhm74', 'checkpoint/Multi/model.ckpt.meta')
+    download_file_from_google_drive('TODO', 'checkpoint/Multi/model.ckpt.data-00000-of-00001')
+    download_file_from_google_drive('TODO', 'checkpoint/Multi/model.ckpt.meta')
 
 
 res = input("Download Basic Model? [y/n]: ")
