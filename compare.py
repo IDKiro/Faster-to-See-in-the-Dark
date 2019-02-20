@@ -95,7 +95,7 @@ fps1 = run(inputImage, unet_checkpoint_dir, model.unet)
 
 print('Use improved method to process...')
 tf.reset_default_graph()
-fps2 = run(inputImage, multi_checkpoint_dir, model.multi_layer3)
+fps2 = run(inputImage, multi_checkpoint_dir, model.multi)
 
 print("Basic method:\nEnd2End fps: {prec: .4f}".format(prec=fps1))
 print("Improved method:\nEnd2End fps: {prec: .4f}".format(prec=fps2))

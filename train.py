@@ -50,7 +50,7 @@ save_freq = 500
 sess = tf.Session()
 in_image = tf.placeholder(tf.float32,[None,None,None,4])
 gt_image = tf.placeholder(tf.float32,[None,None,None,3])
-out_image = model.multi_layer3(in_image)
+out_image = model.multi(in_image)
 
 G_loss = tf.reduce_mean(tf.abs(out_image - gt_image))
 

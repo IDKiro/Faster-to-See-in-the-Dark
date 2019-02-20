@@ -1,8 +1,6 @@
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 
-def lrelu(x):
-    return tf.maximum(x*0.2,x)
 
 def concat_and_upsample(x1, x2, output_shape, in_channels):
     pool_size = 4
@@ -14,29 +12,19 @@ def concat_and_upsample(x1, x2, output_shape, in_channels):
 
     return deconv_output
 
-def upsample_and_concat(x1, x2, output_channels, in_channels):
-    pool_size = 2
-    deconv_filter = tf.Variable(tf.truncated_normal([pool_size, pool_size, output_channels, in_channels], stddev=0.02))
-    deconv = tf.nn.conv2d_transpose(x1, deconv_filter, tf.shape(x2), strides=[1, pool_size, pool_size, 1])
-
-    deconv_output = tf.concat([deconv, x2], 3)
-    deconv_output.set_shape([None, None, None, output_channels * 2])
-
-    return deconv_output
-
 def designA(i_s, i_c, in_channels):
-    dw1 = slim.separable_conv2d(i_s, None, [3,3],1, activation_fn=lrelu)
+    dw1 = slim.separable_conv2d(i_s, None, [3,3],1, activation_fn=tf.nn.relu)
     dw1 = slim.avg_pool2d(dw1, [2,2], padding='SAME')
-    dw2 = slim.separable_conv2d(dw1, None, [3,3],1, activation_fn=lrelu)
+    dw2 = slim.separable_conv2d(dw1, None, [3,3],1, activation_fn=tf.nn.relu)
     dw2 = slim.avg_pool2d(dw2, [2,2], padding='SAME')
 
-    pw1 = slim.conv2d(i_c, in_channels, [1,1], activation_fn=lrelu)
+    pw1 = slim.conv2d(i_c, in_channels, [1,1], activation_fn=tf.nn.relu)
     pw1 = slim.avg_pool2d(pw1, [2,2], padding='SAME')
-    pw2 = slim.conv2d(pw1, in_channels, [1,1], activation_fn=lrelu)
+    pw2 = slim.conv2d(pw1, in_channels, [1,1], activation_fn=tf.nn.relu)
     pw2 = slim.avg_pool2d(pw2, [2,2], padding='SAME')
 
     tmp = tf.concat([i_s, i_c], 3)
-    tmp = slim.conv2d(tmp, 2*in_channels, [3,3], padding='SAME', activation_fn=lrelu)
+    tmp = slim.conv2d(tmp, 2*in_channels, [3,3], padding='SAME', activation_fn=tf.nn.relu)
     tmp = slim.avg_pool2d(tmp, [4,4], stride=4, padding='SAME')
     os, oc = tf.split(tmp, num_or_size_splits=2, axis=3)
 
@@ -45,14 +33,14 @@ def designA(i_s, i_c, in_channels):
     return s, c
 
 def designB(i_s, i_c, in_channels):
-    dw1 = slim.separable_conv2d(i_s, None, [3,3],1, activation_fn=lrelu)
+    dw1 = slim.separable_conv2d(i_s, None, [3,3],1, activation_fn=tf.nn.relu)
     dw1 = slim.avg_pool2d(dw1, [2,2], padding='SAME')
-    dw2 = slim.separable_conv2d(dw1, None, [3,3],1, activation_fn=lrelu)
+    dw2 = slim.separable_conv2d(dw1, None, [3,3],1, activation_fn=tf.nn.relu)
     dw2 = slim.avg_pool2d(dw2, [2,2], padding='SAME')
 
-    pw1 = slim.conv2d(i_c, in_channels, [1,1], activation_fn=lrelu)
+    pw1 = slim.conv2d(i_c, in_channels, [1,1], activation_fn=tf.nn.relu)
     pw1 = slim.avg_pool2d(pw1, [2,2], padding='SAME')
-    pw2 = slim.conv2d(pw1, in_channels, [1,1], activation_fn=lrelu)
+    pw2 = slim.conv2d(pw1, in_channels, [1,1], activation_fn=tf.nn.relu)
     pw2 = slim.avg_pool2d(pw2, [2,2], padding='SAME')
 
     ws = tf.Variable(1, dtype=tf.float32, name="ws")
@@ -67,9 +55,10 @@ def designB(i_s, i_c, in_channels):
     c = tf.concat([pw2, oc], 3)
     return s, c
 
-def multi_A(input):
-    conv1 = slim.conv2d(input, 16, [3,3], rate=1, activation_fn=lrelu)
+def multi(input):
+    conv1 = slim.conv2d(input, 16, [3,3], rate=1, activation_fn=tf.nn.relu)
 
+    # design A or design B
     s1, c1 = designA(conv1, conv1, 16)
     s2, c2 = designA(s1, c1, 32)
     s3, c3 = designA(s2, c2, 64)
@@ -77,106 +66,51 @@ def multi_A(input):
 
     channel_weight_output = tf.multiply(s4, c4)
 
-    conv5 = slim.conv2d(channel_weight_output, 256, [3,3], rate=1, activation_fn=lrelu)
-    conv5 = slim.conv2d(conv5, 256, [3,3], rate=1, activation_fn=lrelu)
+    conv5 = slim.conv2d(channel_weight_output, 256, [3,3], rate=1, activation_fn=tf.nn.relu)
+    conv5 = slim.conv2d(conv5, 256, [3,3], rate=1, activation_fn=tf.nn.relu)
 
     shape6 = tf.multiply(tf.shape(s3), tf.constant([1,1,1,4]))
     up6 =  concat_and_upsample(conv5, s4, shape6, 256)
-    conv6 = slim.conv2d(up6,  128, [3,3], rate=1, activation_fn=lrelu)
-    conv6 = slim.conv2d(conv6, 128, [3,3], rate=1, activation_fn=lrelu)
+    conv6 = slim.conv2d(up6,  128, [3,3], rate=1, activation_fn=tf.nn.relu)
+    conv6 = slim.conv2d(conv6, 128, [3,3], rate=1, activation_fn=tf.nn.relu)
 
     shape7 = tf.multiply(tf.shape(s2), tf.constant([1,1,1,4]))
     up7 =  concat_and_upsample(conv6, s3, shape7, 128)
-    conv7 = slim.conv2d(up7,  64, [3,3], rate=1, activation_fn=lrelu)
-    conv7 = slim.conv2d(conv7, 64, [3,3], rate=1, activation_fn=lrelu)
+    conv7 = slim.conv2d(up7,  64, [3,3], rate=1, activation_fn=tf.nn.relu)
+    conv7 = slim.conv2d(conv7, 64, [3,3], rate=1, activation_fn=tf.nn.relu)
 
     shape8 = tf.multiply(tf.shape(s1), tf.constant([1,1,1,4]))
     up8 =  concat_and_upsample(conv7, s2, shape8, 64)
-    conv8 = slim.conv2d(up8,  32, [3,3], rate=1, activation_fn=lrelu)
-    conv8 = slim.conv2d(conv8, 32, [3,3], rate=1, activation_fn=lrelu)
+    conv8 = slim.conv2d(up8,  32, [3,3], rate=1, activation_fn=tf.nn.relu)
+    conv8 = slim.conv2d(conv8, 32, [3,3], rate=1, activation_fn=tf.nn.relu)
 
     shape9 = tf.multiply(tf.shape(conv1), tf.constant([1,1,1,4]))
     up9 =  concat_and_upsample(conv8, s1, shape9, 32)
-    conv9 = slim.conv2d(up9,  16, [3,3], rate=1, activation_fn=lrelu)
-    conv9 = slim.conv2d(conv9, 16, [3,3], rate=1, activation_fn=lrelu)
+    conv9 = slim.conv2d(up9,  16, [3,3], rate=1, activation_fn=tf.nn.relu)
+    conv9 = slim.conv2d(conv9, 16, [3,3], rate=1, activation_fn=tf.nn.relu)
 
     cat10 = tf.concat([conv9, conv1], 3)
-    conv10 = slim.conv2d(cat10,  16, [3,3], rate=1, activation_fn=lrelu)
+    conv10 = slim.conv2d(cat10,  16, [3,3], rate=1, activation_fn=tf.nn.relu)
     conv10 = slim.conv2d(conv10, 12, [1,1], rate=1, activation_fn=None)
     out = tf.depth_to_space(conv10, 2)
     return out
 
-def multi_B(input):
-    conv1 = slim.conv2d(input, 16, [3,3], rate=1, activation_fn=lrelu)
 
-    s1, c1 = designB(conv1, conv1, 16)
-    s2, c2 = designB(s1, c1, 32)
-    s3, c3 = designB(s2, c2, 64)
-    s4, c4 = designB(s3, c3, 128)
+# U-net 
+# Do not touch, it's only a copy
 
-    channel_weight_output = tf.multiply(s4, c4)
+def lrelu(x):
+    return tf.maximum(x*0.2,x)
 
-    conv5 = slim.conv2d(channel_weight_output, 256, [3,3], rate=1, activation_fn=lrelu)
-    conv5 = slim.conv2d(conv5, 256, [3,3], rate=1, activation_fn=lrelu)
+def upsample_and_concat(x1, x2, output_channels, in_channels):
+    pool_size = 2
+    deconv_filter = tf.Variable(tf.truncated_normal([pool_size, pool_size, output_channels, in_channels], stddev=0.02))
+    deconv = tf.nn.conv2d_transpose(x1, deconv_filter, tf.shape(x2), strides=[1, pool_size, pool_size, 1])
 
-    shape6 = tf.multiply(tf.shape(s3), tf.constant([1,1,1,4]))
-    up6 =  concat_and_upsample(conv5, s4, shape6, 256)
-    conv6 = slim.conv2d(up6,  128, [3,3], rate=1, activation_fn=lrelu)
-    conv6 = slim.conv2d(conv6, 128, [3,3], rate=1, activation_fn=lrelu)
+    deconv_output = tf.concat([deconv, x2], 3)
+    deconv_output.set_shape([None, None, None, output_channels * 2])
 
-    shape7 = tf.multiply(tf.shape(s2), tf.constant([1,1,1,4]))
-    up7 =  concat_and_upsample(conv6, s3, shape7, 128)
-    conv7 = slim.conv2d(up7,  64, [3,3], rate=1, activation_fn=lrelu)
-    conv7 = slim.conv2d(conv7, 64, [3,3], rate=1, activation_fn=lrelu)
-
-    shape8 = tf.multiply(tf.shape(s1), tf.constant([1,1,1,4]))
-    up8 =  concat_and_upsample(conv7, s2, shape8, 64)
-    conv8 = slim.conv2d(up8,  32, [3,3], rate=1, activation_fn=lrelu)
-    conv8 = slim.conv2d(conv8, 32, [3,3], rate=1, activation_fn=lrelu)
-
-    shape9 = tf.multiply(tf.shape(conv1), tf.constant([1,1,1,4]))
-    up9 =  concat_and_upsample(conv8, s1, shape9, 32)
-    conv9 = slim.conv2d(up9,  16, [3,3], rate=1, activation_fn=lrelu)
-    conv9 = slim.conv2d(conv9, 16, [3,3], rate=1, activation_fn=lrelu)
-
-    cat10 = tf.concat([conv9, conv1], 3)
-    conv10 = slim.conv2d(cat10,  16, [3,3], rate=1, activation_fn=lrelu)
-    conv10 = slim.conv2d(conv10, 12, [1,1], rate=1, activation_fn=None)
-    out = tf.depth_to_space(conv10, 2)
-    return out
-
-def multi_layer3(input):
-    conv1 = slim.conv2d(input, 16, [3,3], rate=1, activation_fn=lrelu)
-
-    s1, c1 = designA(conv1, conv1, 16)
-    s2, c2 = designA(s1, c1, 32)
-    s3, c3 = designA(s2, c2, 64)
-    
-    channel_weight_output = tf.multiply(s3, c3)
-
-    conv4 = slim.conv2d(channel_weight_output, 128, [3,3], rate=1, activation_fn=lrelu)
-    conv4 = slim.conv2d(conv4, 128, [3,3], rate=1, activation_fn=lrelu)
-
-    shape5 = tf.multiply(tf.shape(s2), tf.constant([1,1,1,4]))
-    up5 =  concat_and_upsample(conv4, s3, shape5, 128)
-    conv5 = slim.conv2d(up5,  64, [3,3], rate=1, activation_fn=lrelu)
-    conv5 = slim.conv2d(conv5, 64, [3,3], rate=1, activation_fn=lrelu)
-
-    shape6 = tf.multiply(tf.shape(s1), tf.constant([1,1,1,4]))
-    up6 =  concat_and_upsample(conv5, s2, shape6, 64)
-    conv6 = slim.conv2d(up6,  32, [3,3], rate=1, activation_fn=lrelu)
-    conv6 = slim.conv2d(conv6, 32, [3,3], rate=1, activation_fn=lrelu)
-
-    shape7 = tf.multiply(tf.shape(conv1), tf.constant([1,1,1,4]))
-    up7 =  concat_and_upsample(conv6, s1, shape7, 32)
-    conv7 = slim.conv2d(up7,  16, [3,3], rate=1, activation_fn=lrelu)
-    conv7 = slim.conv2d(conv7, 16, [3,3], rate=1, activation_fn=lrelu)
-
-    cat8 = tf.concat([conv7, conv1], 3)
-    conv8 = slim.conv2d(cat8,  16, [3,3], rate=1, activation_fn=lrelu)
-    conv8 = slim.conv2d(conv8, 12, [1,1], rate=1, activation_fn=None)
-    out = tf.depth_to_space(conv8, 2)
-    return out
+    return deconv_output
 
 def unet(input):
     conv1 = slim.conv2d(input, 32, [3, 3], rate=1, activation_fn=lrelu, scope='g_conv1_1')
