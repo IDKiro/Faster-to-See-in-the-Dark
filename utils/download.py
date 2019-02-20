@@ -35,7 +35,7 @@ res = input("Download Improved Model? [y/n]: ")
 while res is not 'y' and res is not 'n' and res is not 'Y' and res is not 'N':
     res = input("[Input error] Download Improved Model? [y/n]: ")
 if res is 'y' or res is 'Y':
-    print('Downloading Improved Model... (110MB)')
+    print('Downloading Improved Model... (25MB)')
     if not os.path.isdir('checkpoint/Multi/'):
         os.makedirs('checkpoint/Multi/')
     download_file_from_google_drive('1CYRIbTbNl4TdYXnkoEqXhbt6UpA4S8to', 'checkpoint/Multi/model.ckpt.data-00000-of-00001')
