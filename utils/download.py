@@ -36,8 +36,10 @@ while res is not 'y' and res is not 'n' and res is not 'Y' and res is not 'N':
     res = input("[Input error] Download Improved Model? [y/n]: ")
 if res is 'y' or res is 'Y':
     print('Downloading Improved Model... (110MB)')
-    download_file_from_google_drive('TODO', 'checkpoint/Multi/model.ckpt.data-00000-of-00001')
-    download_file_from_google_drive('TODO', 'checkpoint/Multi/model.ckpt.meta')
+    if not os.path.isdir('checkpoint/Multi/'):
+        os.makedirs('checkpoint/Multi/')
+    download_file_from_google_drive('1CYRIbTbNl4TdYXnkoEqXhbt6UpA4S8to', 'checkpoint/Multi/model.ckpt.data-00000-of-00001')
+    download_file_from_google_drive('129xMFWBrMgtbZORn-GpZeKcAA1xtMTKd', 'checkpoint/Multi/model.ckpt.meta')
 
 
 res = input("Download Basic Model? [y/n]: ")
@@ -45,6 +47,8 @@ while res is not 'y' and res is not 'n' and res is not 'Y' and res is not 'N':
     res = input("[Input error] Download Basic Model? [y/n]: ")
 if res is 'y' or res is 'Y':
     print('Downloading Basic Model... (84MB)')
+    if not os.path.isdir('checkpoint/Unet/'):
+        os.makedirs('checkpoint/Unet/')
     download_file_from_google_drive('1wmx7AM6XWHjHIvpErmIouQgbQoMxAymG', 'checkpoint/Unet/model.ckpt.data-00000-of-00001')
     download_file_from_google_drive('1OmrGMng1QuwUa8lf-_wBVvbRJwBr0ETr', 'checkpoint/Unet/model.ckpt.meta')
 
@@ -54,5 +58,7 @@ while res is not 'y' and res is not 'n' and res is not 'Y' and res is not 'N':
     res = input("[Input error] Download Dataset? [y/n]: ")
 if res is 'y' or res is 'Y':
     print('Downloading Dataset... (25GB)')
+    if not os.path.isdir('dataset/'):
+        os.makedirs('dataset/')
     download_file_from_google_drive('10kpAcvldtcb9G2ze5hTcF1odzu4V_Zvh', 'dataset/Sony.zip')
     os.system('unzip dataset/Sony.zip -d dataset')

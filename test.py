@@ -37,7 +37,7 @@ test_ids = [int(os.path.basename(test_fn)[0:5]) for test_fn in test_fns]
 sess = tf.Session()
 in_image = tf.placeholder(tf.float32, [None, None, None, 4])
 gt_image = tf.placeholder(tf.float32, [None, None, None, 3])
-out_image = model.multi_A(in_image)
+out_image = model.multi_layer3(in_image)
 
 saver = tf.train.Saver()
 sess.run(tf.global_variables_initializer())

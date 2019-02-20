@@ -50,7 +50,7 @@ save_freq = 500
 sess = tf.Session()
 in_image = tf.placeholder(tf.float32,[None,None,None,4])
 gt_image = tf.placeholder(tf.float32,[None,None,None,3])
-out_image = model.multi_A(in_image)
+out_image = model.multi_layer3(in_image)
 
 G_loss = tf.reduce_mean(tf.abs(out_image - gt_image))
 
@@ -141,7 +141,7 @@ for epoch in range(lastepoch,4001):
         output = np.minimum(np.maximum(output,0),1)
         g_loss[ind]=G_current
 
-        print("%d %d Loss=%.3f Time=%.3f"%(epoch,cnt,np.mean(g_loss[np.where(g_loss)]),time.time()-st))
+        print("%d %d Loss=%.4f Time=%.3f"%(epoch,cnt,np.mean(g_loss[np.where(g_loss)]),time.time()-st))
         
         if epoch%save_freq==0:
             if not os.path.isdir(result_dir + '%04d'%epoch):

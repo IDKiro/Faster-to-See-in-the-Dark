@@ -100,7 +100,9 @@ def multi_A(input):
     conv9 = slim.conv2d(up9,  16, [3,3], rate=1, activation_fn=lrelu)
     conv9 = slim.conv2d(conv9, 16, [3,3], rate=1, activation_fn=lrelu)
 
-    conv10 = slim.conv2d(conv9, 12, [1,1], rate=1, activation_fn=None)
+    cat10 = tf.concat([conv9, conv1], 3)
+    conv10 = slim.conv2d(cat10,  16, [3,3], rate=1, activation_fn=lrelu)
+    conv10 = slim.conv2d(conv10, 12, [1,1], rate=1, activation_fn=None)
     out = tf.depth_to_space(conv10, 2)
     return out
 
@@ -137,8 +139,43 @@ def multi_B(input):
     conv9 = slim.conv2d(up9,  16, [3,3], rate=1, activation_fn=lrelu)
     conv9 = slim.conv2d(conv9, 16, [3,3], rate=1, activation_fn=lrelu)
 
-    conv10 = slim.conv2d(conv9, 12, [1,1], rate=1, activation_fn=None)
+    cat10 = tf.concat([conv9, conv1], 3)
+    conv10 = slim.conv2d(cat10,  16, [3,3], rate=1, activation_fn=lrelu)
+    conv10 = slim.conv2d(conv10, 12, [1,1], rate=1, activation_fn=None)
     out = tf.depth_to_space(conv10, 2)
+    return out
+
+def multi_layer3(input):
+    conv1 = slim.conv2d(input, 16, [3,3], rate=1, activation_fn=lrelu)
+
+    s1, c1 = designA(conv1, conv1, 16)
+    s2, c2 = designA(s1, c1, 32)
+    s3, c3 = designA(s2, c2, 64)
+    
+    channel_weight_output = tf.multiply(s3, c3)
+
+    conv4 = slim.conv2d(channel_weight_output, 128, [3,3], rate=1, activation_fn=lrelu)
+    conv4 = slim.conv2d(conv4, 128, [3,3], rate=1, activation_fn=lrelu)
+
+    shape5 = tf.multiply(tf.shape(s2), tf.constant([1,1,1,4]))
+    up5 =  concat_and_upsample(conv4, s3, shape5, 128)
+    conv5 = slim.conv2d(up5,  64, [3,3], rate=1, activation_fn=lrelu)
+    conv5 = slim.conv2d(conv5, 64, [3,3], rate=1, activation_fn=lrelu)
+
+    shape6 = tf.multiply(tf.shape(s1), tf.constant([1,1,1,4]))
+    up6 =  concat_and_upsample(conv5, s2, shape6, 64)
+    conv6 = slim.conv2d(up6,  32, [3,3], rate=1, activation_fn=lrelu)
+    conv6 = slim.conv2d(conv6, 32, [3,3], rate=1, activation_fn=lrelu)
+
+    shape7 = tf.multiply(tf.shape(conv1), tf.constant([1,1,1,4]))
+    up7 =  concat_and_upsample(conv6, s1, shape7, 32)
+    conv7 = slim.conv2d(up7,  16, [3,3], rate=1, activation_fn=lrelu)
+    conv7 = slim.conv2d(conv7, 16, [3,3], rate=1, activation_fn=lrelu)
+
+    cat8 = tf.concat([conv7, conv1], 3)
+    conv8 = slim.conv2d(cat8,  16, [3,3], rate=1, activation_fn=lrelu)
+    conv8 = slim.conv2d(conv8, 12, [1,1], rate=1, activation_fn=None)
+    out = tf.depth_to_space(conv8, 2)
     return out
 
 def unet(input):
