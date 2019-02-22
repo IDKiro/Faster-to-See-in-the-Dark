@@ -16,7 +16,7 @@ python utils/download.py
 
 Also you can download directly from Google Drive:
 
-- Improved Model (Multi): [Data](https://drive.google.com/file/d/1CYRIbTbNl4TdYXnkoEqXhbt6UpA4S8to/view?usp=sharing) and [Meta](https://drive.google.com/file/d/129xMFWBrMgtbZORn-GpZeKcAA1xtMTKd/view?usp=sharing)
+- Improved Model (Multi): [Data](https://drive.google.com/file/d/1SNJqvnW6Mm9DO2AW66bURN1CqztFw7Ph/view?usp=sharing) and [Meta](https://drive.google.com/file/d/1z-X4_vLHyRVUtz5PWesY3DcCvET7f38I/view?usp=sharing)
 - Basic Model (Unet): [Data](https://drive.google.com/file/d/1wmx7AM6XWHjHIvpErmIouQgbQoMxAymG/view?usp=sharing) and [Meta](https://drive.google.com/file/d/1OmrGMng1QuwUa8lf-_wBVvbRJwBr0ETr/view?usp=sharing)
 - Dataset: [Sony](https://drive.google.com/file/d/10kpAcvldtcb9G2ze5hTcF1odzu4V_Zvh/view?usp=sharing)
 

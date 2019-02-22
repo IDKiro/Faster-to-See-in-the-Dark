@@ -44,7 +44,7 @@ for i in range(len(test_fns)):
     _, test_fn = os.path.split(test_fns[i])
     test_ids.append(int(test_fn[0:5]))
 
-ps = 512 #patch size for training
+ps = 512
 save_freq = 500
 
 sess = tf.Session()
@@ -90,8 +90,6 @@ for epoch in range(lastepoch, 3001):
     cnt = 0
     if epoch > 1500:
         learning_rate = 1e-5
-    if epoch > 2500:
-        learning_rate = 2e-6
 
     for ind in np.random.permutation(len(train_ids)):
         # get the path from image id
