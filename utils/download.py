@@ -38,8 +38,8 @@ if res is 'y' or res is 'Y':
     print('Downloading Improved Model... (25MB)')
     if not os.path.isdir('checkpoint/Multi/'):
         os.makedirs('checkpoint/Multi/')
-    download_file_from_google_drive('1CYRIbTbNl4TdYXnkoEqXhbt6UpA4S8to', 'checkpoint/Multi/model.ckpt.data-00000-of-00001')
-    download_file_from_google_drive('129xMFWBrMgtbZORn-GpZeKcAA1xtMTKd', 'checkpoint/Multi/model.ckpt.meta')
+    download_file_from_google_drive('TODO1', 'checkpoint/Multi/model.ckpt.data-00000-of-00001')
+    download_file_from_google_drive('TODO2', 'checkpoint/Multi/model.ckpt.meta')
 
 
 res = input("Download Basic Model? [y/n]: ")
