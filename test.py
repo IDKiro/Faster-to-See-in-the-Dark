@@ -19,9 +19,9 @@ def pack_raw(raw):
     H = img_shape[0]
     W = img_shape[1]
 
-    out = np.concatenate((im[0:H:2, 0:W:2, :],
-                        im[0:H:2, 1:W:2, :],
-                        im[1:H:2, 1:W:2, :],
+    out = np.concatenate((im[0:H:2, 0:W:2, :], 
+                        im[0:H:2, 1:W:2, :], 
+                        im[1:H:2, 1:W:2, :], 
                         im[1:H:2, 0:W:2, :]), axis=2)
     return out
 
@@ -33,11 +33,6 @@ result_dir = './result/'
 # get test IDs
 test_fns = glob.glob(gt_dir + '/1*.ARW')
 test_ids = [int(os.path.basename(test_fn)[0:5]) for test_fn in test_fns]
-
-DEBUG = 0
-if DEBUG == 1:
-    save_freq = 2
-    test_ids = test_ids[0:5]
 
 sess = tf.Session()
 in_image = tf.placeholder(tf.float32, [None, None, None, 4])
@@ -72,7 +67,7 @@ for test_id in test_ids:
         input_full = np.expand_dims(pack_raw(raw), axis=0) * ratio
 
         im = raw.postprocess(use_camera_wb=True, half_size=False, no_auto_bright=True, output_bps=16)
-        # scale_full = np.expand_dims(np.float32(im/65535.0),axis = 0)*ratio
+        # scale_full = np.expand_dims(np.float32(im/65535.0), axis = 0)*ratio
         scale_full = np.expand_dims(np.float32(im / 65535.0), axis=0)
 
         gt_raw = rawpy.imread(gt_path)
