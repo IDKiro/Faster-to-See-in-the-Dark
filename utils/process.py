@@ -5,13 +5,17 @@ import numpy as np
 import rawpy
 import tifffile
 
-def raw2tiff(raw_dir, output_dir):
-    raw = rawpy.imread(raw_dir)
-    processed = raw.postprocess(use_camera_wb=True, half_size=False, no_auto_bright=True, output_bps=16)
-    filename = os.path.splitext(os.path.split(raw_dir)[-1])[0]
-    tiff_file = os.path.join(output_dir, filename+'.tiff')
-    tifffile.imwrite(tiff_file, data=processed)
-    print('saved:', tiff_file)
+def raw2tiff(input_dir, output_dir):
+    raw_filelist = glob.glob(os.path.join(input_dir, '*.ARW'))
+
+    for raw_file in raw_filelist:  
+        raw = rawpy.imread(raw_file)
+        processed = raw.postprocess(use_camera_wb=True, half_size=False, no_auto_bright=True, output_bps=16)
+
+        filename = os.path.splitext(os.path.split(raw_file)[-1])[0]
+        tiff_file = os.path.join(output_dir, filename+'.tiff')
+        tifffile.imwrite(tiff_file, data=processed)
+        print('saved:', tiff_file)
 
 def pack_raw(raw):
     #pack Bayer image to 4 channels
